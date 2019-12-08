@@ -1,0 +1,20 @@
+{
+  "name": "message-bottle",
+  "version": "0.0.1",
+  "description": "A tool for sending and receiving files and messages with throttling, scheduling, prioritization, even over poor network connections",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Tibbs",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-typescript": "^7.7.4",
+    "@types/jest": "^24.0.23",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0",
+    "ts-node": "^8.5.4"
+  }
+}
