@@ -1,13 +1,25 @@
+
+require("@babel/register")({extensions: ['.js', '.ts']})
+
 import express from 'express';
 import program from 'commander';
+import network from '../network/network';
+import heartbeat from '../heartbeat/heartbeat';
 
-function helloWorldMiddleware(req: Express.Request, res: Express.Response) {
-  (res as any).send('Hello, world!')
+function helloWorldMiddleware(req, res) {
+  res.send('Hello, world!');
 }
 
-async function run(argv: string[]) {
+function heatbeatReceiverMiddleware(req, res){
+  console.log(`Heartbeat Middleware: ${JSON.stringify(req.body, null, 4)}`);
+  res.send('Heartbeat acknowledged!');
+}
 
-  program.option("-p, --port <port>", "What port to run the service on");
+async function run(argv) {
+
+  program
+    .option("-p, --port <port>", "What port to run the service on")
+    .option('-d, --destination <destination>', 'What URL to send the traffic to');
 
   program.parse(argv);
 
@@ -15,15 +27,29 @@ async function run(argv: string[]) {
     throw "Cannot start the server without a port specified";
   }
 
+  if (!program.destination){
+    throw 'Cannot start the server without a destination url';
+  }
+
   const app = express();
 
+  app.use(express.json()) // for parsing application/json
+
   app.get('/', helloWorldMiddleware);
+  app.post('/', heatbeatReceiverMiddleware);
 
   app.listen(program.port);
+
+
+  network.configure({
+    destination: program.destination
+  });
+
+  heartbeat(network);
 
   return app;
 };
 
 run(process.argv);
 
-export  {run, helloWorldMiddleware};
+export { run, helloWorldMiddleware, heatbeatReceiverMiddleware };

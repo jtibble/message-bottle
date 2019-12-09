@@ -4,24 +4,32 @@
   "description": "A tool for sending and receiving files and messages with throttling, scheduling, prioritization, even over poor network connections",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf dist",
+    "pretest": "npm run clean",
     "test": "jest",
-    "server": "ts-node src/server/index.ts"
+    "prebuild": "npm run clean",
+    "build": "babel src --extensions .ts --out-dir dist/",
+    "server": "npm run build && node dist/server/index.js -p 3000 -d http://localhost:3000"
   },
   "author": "Tibbs",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-typescript": "^7.7.4",
+    "@babel/register": "^7.7.4",
     "@types/express": "^4.17.2",
     "@types/jest": "^24.0.23",
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
-    "ts-node": "^8.5.4"
+    "jest-express": "^1.10.1"
   },
   "dependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
     "commander": "^4.0.1",
     "express": "^4.17.1",
+    "request-promise-native": "^1.0.8",
     "typescript": "^3.7.3"
   }
 }
